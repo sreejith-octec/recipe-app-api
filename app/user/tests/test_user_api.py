@@ -11,6 +11,7 @@ TOKEN_URL = reverse('user:token')
 
 
 def create_user(**param):
+    """Helper function to create new user"""
     return get_user_model().objects.create_user(**param)
 
 
@@ -67,8 +68,8 @@ class PublicUserApiTest(TestCase):
 
     def test_create_token_invalid_credentials(self):
         """Test token is created if invalid credentials are given"""
+        create_user(email='test1@gmail.com', password='pass123')
         payload = {'email': 'test1@gmail.com', 'password': 'testpass'}
-        create_user({'email': 'test1@gmail.com', 'password': 'pass123'})
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
@@ -77,7 +78,6 @@ class PublicUserApiTest(TestCase):
     def test_create_token_no_user(self):
         """Test token is not created if user doesn't exist"""
         payload = {'email': 'test1@gmail.com', 'password': 'testpass'}
-        create_user(**payload)
         res = self.client.post(TOKEN_URL, payload)
 
         self.assertNotIn('token', res.data)
