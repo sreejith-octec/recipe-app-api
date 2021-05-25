@@ -44,3 +44,32 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Ingredient(models.Model):
+    """Ingredient to be used in a recipe"""
+    name = models.CharField(max_length=255)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    def __str__(self):
+        return self.name
+
+
+class Recipie(models.Model):
+    """Recipie object"""
+    name = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+    title = models.CharField(max_length=255)
+    time_minutes = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
+    link = models.CharField(max_length=255, null=True)
+    tags = models.ManyToManyField('Tag')
+    ingredient = models.ManyToManyField('Ingredient')
+
+    def __str__(self):
+        return self.title
